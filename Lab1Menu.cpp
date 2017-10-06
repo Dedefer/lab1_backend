@@ -201,23 +201,23 @@ void Lab1Menu::compareSorts(std::istream& inputStream, std::ostream& outputStrea
     if (objPtr != objPtrMap.end()) {
         auto srcObjPtr = (objPtr -> second).get();
 
-        auto shellTime1 = std::time(nullptr);
+        auto shellTime1 = std::clock();
         std::unique_ptr<Sequence<int>> shellSorted(SequenceSorts<int>::shellSort(srcObjPtr, exampleFunctionsForSort::cmp,
                                                              exampleFunctionsForSort::stepFunc));
-        auto shellTime2 = std::time(nullptr);
+        auto shellTime2 = std::clock();
 
 
-        auto shakerTime1 = std::time(nullptr);
+        auto shakerTime1 = std::clock();
         std::unique_ptr<Sequence<int>> shakerSorted(SequenceSorts<int>::shakerSort(srcObjPtr, exampleFunctionsForSort::cmp));
-        auto shakerTime2 = std::time(nullptr);
+        auto shakerTime2 = std::clock();
 
-        auto countingTime1 = std::time(nullptr);
+        auto countingTime1 = std::clock();
         std::unique_ptr<Sequence<int>> countingSorted(SequenceSorts<int>::countingSort(srcObjPtr));
-        auto countingTime2 = std::time(nullptr);
+        auto countingTime2 = std::clock();
 
-        outputStream << "shaker sort : " << shakerTime2 - shakerTime1 << std::endl
-                     << "counting sort : " << countingTime2 - countingTime1 << std::endl
-                     << "shell sort : " << shellTime2 - shakerTime1 << std::endl;
+        outputStream << "shaker sort : " << 1000.0*(shakerTime2 - shakerTime1)/CLOCKS_PER_SEC << std::endl
+                     << "counting sort : " << 1000.0*(countingTime2 - countingTime1)/CLOCKS_PER_SEC << std::endl
+                     << "shell sort : " << 1000.0*(shellTime2 - shakerTime1)/CLOCKS_PER_SEC << std::endl;
 
     } else {throw std::logic_error("sequence doesn't exist");}
 }
@@ -236,21 +236,29 @@ void Lab1Menu::sortSequence(std::istream& inputStream, std::ostream& outputStrea
     Sequence<int>* newObject = nullptr;
     auto objPtr = objPtrMap.find(nameOfSequence);
     if (objPtr != objPtrMap.end()) {
+        std::clock_t time1, time2;
         if (typeOfSort == "shell") {
+            time1 = std::clock();
             newObject = SequenceSorts<int>::shellSort((objPtr -> second).get(),
                                                       exampleFunctionsForSort::cmp,
                                                       exampleFunctionsForSort::stepFunc);
+            time2 = std::clock();
 
         } else if (typeOfSort == "shaker") {
+            time1 = std::clock();
             newObject = SequenceSorts<int>::shakerSort((objPtr -> second).get(),
                                                       exampleFunctionsForSort::cmp);
+            time2 = std::clock();
         } else if (typeOfSort == "counting") {
+            time1 = std::clock();
             newObject = SequenceSorts<int>::countingSort((objPtr -> second).get());
+            time2 = std::clock();
         } else {throw std::logic_error("type of sort doesn't implemented");}
         objPtrMap[nameOfDestSequence].reset(newObject);
         outputStream << "sorted sequence " << nameOfSequence
                      << " by " << typeOfSort << " sort named "
-                     << nameOfDestSequence << " added\n";
+                     << nameOfDestSequence << " added\n"
+                     << "time : " << 1000.0*(time2 - time1)/CLOCKS_PER_SEC << std::endl;
     } else {throw std::logic_error("sequence doesn't exist");}
 }
 
@@ -276,42 +284,42 @@ void Lab1Menu::compareSequencesBySort(std::istream& inputStream, std::ostream& o
             tempListSequencePtr -> append(tempObj);
         }
         if (typeOfSort == "shell") {
-            auto listTime1 = std::time(nullptr);
+            auto listTime1 = std::clock();
             tempSortedSequencePtr.reset(SequenceSorts<int>::shellSort(tempListSequencePtr.get(),
                                                                       exampleFunctionsForSort::cmp,
                                                                       exampleFunctionsForSort::stepFunc));
-            auto listTime2 = std::time(nullptr);
+            auto listTime2 = std::clock();
             tempSortedSequencePtr.reset(nullptr);
-            auto arrayTime1 = std::time(nullptr);
+            auto arrayTime1 = std::clock();
             tempSortedSequencePtr.reset(SequenceSorts<int>::shellSort(tempArraySequencePtr.get(),
                                                                       exampleFunctionsForSort::cmp,
                                                                       exampleFunctionsForSort::stepFunc));
-            auto arrayTime2 = std::time(nullptr);
-            outputStream << "ListSequence : " << listTime2 - listTime1 << std::endl
-                         << "ArraySequence : " << arrayTime2 - arrayTime1 << std::endl;
+            auto arrayTime2 = std::clock();
+            outputStream << "ListSequence : " << 1000.0*(listTime2 - listTime1)/CLOCKS_PER_SEC << std::endl
+                         << "ArraySequence : " << 1000.0*(arrayTime2 - arrayTime1)/CLOCKS_PER_SEC << std::endl;
 
         } else if (typeOfSort == "shaker") {
-            auto listTime1 = std::time(nullptr);
+            auto listTime1 = std::clock();
             tempSortedSequencePtr.reset(SequenceSorts<int>::shakerSort(tempListSequencePtr.get(),
                                                                       exampleFunctionsForSort::cmp));
-            auto listTime2 = std::time(nullptr);
+            auto listTime2 = std::clock();
             tempSortedSequencePtr.reset(nullptr);
-            auto arrayTime1 = std::time(nullptr);
+            auto arrayTime1 = std::clock();
             tempSortedSequencePtr.reset(SequenceSorts<int>::shakerSort(tempArraySequencePtr.get(),
                                                                       exampleFunctionsForSort::cmp));
-            auto arrayTime2 = std::time(nullptr);
-            outputStream << "ListSequence : " << listTime2 - listTime1 << std::endl
-                         << "ArraySequence : " << arrayTime2 - arrayTime1 << std::endl;
+            auto arrayTime2 = std::clock();
+            outputStream << "ListSequence : " << 1000.0*(listTime2 - listTime1)/CLOCKS_PER_SEC << std::endl
+                         << "ArraySequence : " << 1000.0*(arrayTime2 - arrayTime1)/CLOCKS_PER_SEC << std::endl;
         } else if (typeOfSort == "counting") {
-            auto listTime1 = std::time(nullptr);
+            auto listTime1 = std::clock();
             tempSortedSequencePtr.reset(SequenceSorts<int>::countingSort(tempListSequencePtr.get()));
-            auto listTime2 = std::time(nullptr);
+            auto listTime2 = std::clock();
             tempSortedSequencePtr.reset(nullptr);
-            auto arrayTime1 = std::time(nullptr);
+            auto arrayTime1 = std::clock();
             tempSortedSequencePtr.reset(SequenceSorts<int>::countingSort(tempArraySequencePtr.get()));
-            auto arrayTime2 = std::time(nullptr);
-            outputStream << "ListSequence : " << listTime2 - listTime1 << std::endl
-                         << "ArraySequence : " << arrayTime2 - arrayTime1 << std::endl;
+            auto arrayTime2 = std::clock();
+            outputStream << "ListSequence : " << 1000.0*(listTime2 - listTime1)/CLOCKS_PER_SEC << std::endl
+                         << "ArraySequence : " << 1000.0*(arrayTime2 - arrayTime1)/CLOCKS_PER_SEC << std::endl;
         } else {throw std::logic_error("type of sort doesn't implemented");}
     } else {throw std::logic_error("sequence doesn't exist");}
 }
@@ -366,7 +374,7 @@ void Lab1Menu::help(std::istream& inputStream, std::ostream& outputStream) {
                  << "get_size {sequence}\n"
                  << "get_element {index} {sequence}\n"
                  << "append/prepend {value} {seqquence}\n"
-                 << "insert {value} {index} {sequence}"
+                 << "insert {value} {index} {sequence}\n"
                  << "clear {sequence}\n"
                  << "copy {sequence} {destination sequence}\n"
                  << "subsequence {first index} {last index} {sequence} {destination sequence}\n"
