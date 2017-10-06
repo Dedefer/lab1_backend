@@ -334,11 +334,12 @@ Lab1Menu::Lab1Menu() {
     funcMap["compare_sequences_by_sorts"] = &Lab1Menu::compareSequencesBySort;
     funcMap["get_element"] = &Lab1Menu::getElement;
     funcMap["help"] = &Lab1Menu::help;
-    funcMap["random_sequence"] = &Lab1Menu::createRandomSequence;
+    funcMap["random"] = &Lab1Menu::createRandomSequence;
 }
 
 void Lab1Menu::menuCycle(std::istream& inputStream, std::ostream& outputStream) {
     std::string nameOfCommand;
+    outputStream << "type 'help' for help\n";
     do {
         inputStream >> nameOfCommand;
         if(nameOfCommand == "exit") {
@@ -359,11 +360,22 @@ void Lab1Menu::menuCycle(std::istream& inputStream, std::ostream& outputStream) 
 
 void Lab1Menu::help(std::istream& inputStream, std::ostream& outputStream) {
     Lab1Menu::tma(inputStream);
-    for (auto& couple : funcMap) {
-        outputStream << couple.first << " ";
-    }
-    outputStream << std::endl;
-
+    outputStream << "new {sequence type (ArraySequence, ListSequence)} {sequence}\n"
+                 << "random {size} {sequence type (ArraySequence, ListSequence)} {sequence}\n"
+                 << "remove {sequence}\n"
+                 << "get_size {sequence}\n"
+                 << "get_element {index} {sequence}\n"
+                 << "append/prepend {value} {seqquence}\n"
+                 << "insert {value} {index} {sequence}"
+                 << "clear {sequence}\n"
+                 << "copy {sequence} {destination sequence}\n"
+                 << "subsequence {first index} {last index} {sequence} {destination sequence}\n"
+                 << "show {sequence}\n"
+                 << "show_all\n"
+                 << "sort {sort type (shell, counting, shaker)} {sequence} {destination sequence}\n"
+                 << "compare_sorts {sequence}\n"
+                 << "compare_sequences_by_sorts {sort type (shell, counting, shaker)} {sequence}\n"
+                 << "help\n";
 }
 
 void Lab1Menu::nea(std::istream& inputStream) {
